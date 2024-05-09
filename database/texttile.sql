@@ -230,23 +230,27 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`),
   KEY `fk_user_user_type_idx` (`user_type_id`),
   CONSTRAINT `fk_user_user_type` FOREIGN KEY (`user_type_id`) REFERENCES `user_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table texttile_db.user: ~1 rows (approximately)
+-- Dumping data for table texttile_db.user: ~4 rows (approximately)
 REPLACE INTO `user` (`id`, `fname`, `lname`, `mobile`, `username`, `password`, `status`, `user_type_id`) VALUES
-	(1, 'Eshan', 'Oshadha', '0778444555', 'eshan', '123', 1, 1);
+	(1, 'Tharaka', 'Sankalpa', '0771112223', 'tharaka', '123', 1, 1),
+	(2, 'Sahan', 'Perera', '0772222222', 'perera', '456', 1, 2),
+	(3, 'Kasun', 'Bandara', '0718383453', 'kasun', '456', 1, 3),
+	(5, 'Sahan', 'Wijesinghe', '0778112345', 'sahan', '567', 1, 2);
 
 -- Dumping structure for table texttile_db.user_type
 CREATE TABLE IF NOT EXISTS `user_type` (
   `id` int NOT NULL AUTO_INCREMENT,
   `type` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 
 -- Dumping data for table texttile_db.user_type: ~2 rows (approximately)
 REPLACE INTO `user_type` (`id`, `type`) VALUES
 	(1, 'Admin'),
-	(2, 'User');
+	(2, 'User'),
+	(3, 'Cashier');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
