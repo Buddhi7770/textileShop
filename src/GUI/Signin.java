@@ -148,8 +148,8 @@ public class Signin extends javax.swing.JFrame {
                         String fname = resultset.getString("fname");
                         String lname = resultset.getString("lname");
                         int user_id = resultset.getInt("user_type_id");
-                        Home home = new Home(fname,lname,user_id);
-                        home.setVisible(true);
+                        //Home home = new Home(fname,lname,user_id);
+                        //home.setVisible(true);
                         this.dispose();
                     }else{
                         //Inactive user
