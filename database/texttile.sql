@@ -225,19 +225,33 @@ CREATE TABLE IF NOT EXISTS `user` (
   `mobile` varchar(10) NOT NULL,
   `username` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL,
-  `status` int NOT NULL DEFAULT '1',
+  `user_status_id` int NOT NULL,
   `user_type_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_user_user_type_idx` (`user_type_id`),
+  KEY `fk_user_user_status1_idx` (`user_status_id`),
+  CONSTRAINT `fk_user_user_status1` FOREIGN KEY (`user_status_id`) REFERENCES `user_status` (`id`),
   CONSTRAINT `fk_user_user_type` FOREIGN KEY (`user_type_id`) REFERENCES `user_type` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 
 -- Dumping data for table texttile_db.user: ~4 rows (approximately)
-REPLACE INTO `user` (`id`, `fname`, `lname`, `mobile`, `username`, `password`, `status`, `user_type_id`) VALUES
+REPLACE INTO `user` (`id`, `fname`, `lname`, `mobile`, `username`, `password`, `user_status_id`, `user_type_id`) VALUES
 	(1, 'Tharaka', 'Sankalpa', '0771112223', 'tharaka', '123', 1, 1),
 	(2, 'Sahan', 'Perera', '0772222222', 'perera', '456', 1, 2),
-	(3, 'Kasun', 'Bandara', '0718383453', 'kasun', '456', 1, 3),
-	(5, 'Sahan', 'Wijesinghe', '0778112345', 'sahan', '567', 1, 2);
+	(3, 'Kasun', 'Bandara', '0718383453', 'kasun', '456', 1, 2),
+	(4, 'Sahan', 'Wijesinghe', '0778112345', 'sahan', '567', 1, 2);
+
+-- Dumping structure for table texttile_db.user_status
+CREATE TABLE IF NOT EXISTS `user_status` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `status` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+
+-- Dumping data for table texttile_db.user_status: ~2 rows (approximately)
+REPLACE INTO `user_status` (`id`, `status`) VALUES
+	(1, 'Active'),
+	(2, 'Inactive');
 
 -- Dumping structure for table texttile_db.user_type
 CREATE TABLE IF NOT EXISTS `user_type` (
@@ -246,7 +260,7 @@ CREATE TABLE IF NOT EXISTS `user_type` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table texttile_db.user_type: ~2 rows (approximately)
+-- Dumping data for table texttile_db.user_type: ~3 rows (approximately)
 REPLACE INTO `user_type` (`id`, `type`) VALUES
 	(1, 'Admin'),
 	(2, 'User'),

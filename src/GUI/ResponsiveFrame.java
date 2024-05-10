@@ -97,7 +97,7 @@ public class ResponsiveFrame extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         A a = new A();
-        this.add(a,BorderLayout.CENTER);
+        this.add(a, BorderLayout.CENTER);
         SwingUtilities.updateComponentTreeUI(this);
         //repaint();
         //revalidate();

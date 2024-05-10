@@ -18,7 +18,7 @@ public class Splash extends javax.swing.JFrame {
      */
     public Splash() {
         initComponents();
-        
+
         Thread t = new Thread(() -> {
             for (int i = 0; i <= 100; i++) {
                 jProgressBar1.setValue(i);
@@ -28,11 +28,11 @@ public class Splash extends javax.swing.JFrame {
                     e.printStackTrace();
                 }
             }
-            
+
             CommonFunctions commonFunctions = new CommonFunctions();
             commonFunctions.setVisible(true);
             this.dispose();
-            
+
         });
         t.start();
     }
