@@ -13,13 +13,13 @@ git clone https://github.com/Buddhi7770/textileShop.git
 Just click the code button and Download zip
 
 ## Whats In Here
-* [MySQL INSERT UPDATE DELETE SEARCH](#MySQL-Query-handling).
-* [MySQL JOIN LIKE SUB QUERIES](#b-bower).
-* [MySQL ORDER GROUP AND OPERATOR](#c-npm--nodejs).
-* [JAVA ComoboBox Loading](#a-ruby-on-rails).
-* [JAVA Table Loading](#b-bower).
-* [Jasper Reports](#c-npm--nodejs).
-* [JAVA Progressbar](#jProgressbar).
+* [MySQL INSERT UPDATE DELETE SEARCH](#MySQL).
+* [MySQL JOIN LIKE SUB QUERIES](#MySQL).
+* [MySQL ORDER GROUP AND OPERATOR](#MySQL).
+* [JAVA ComoboBox Loading](#JAVA).
+* [JAVA Table Loading](#JAVA).
+* [Jasper Reports](#JAVA).
+* [JAVA Progressbar](#JAVA).
 
 ## Notes
 This Repository provides a basic idea about MySQL functions and JAVA Components handling.
