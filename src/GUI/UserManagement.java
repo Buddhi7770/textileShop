@@ -7,8 +7,10 @@ package GUI;
 
 import Model.MySQL;
 import java.sql.ResultSet;
+import java.util.HashMap;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
@@ -25,18 +27,18 @@ public class UserManagement extends javax.swing.JPanel {
      */
     public UserManagement(Home home) {
         initComponents();
-        loadUsers();
+        loadUsers("SELECT * FROM `user` INNER JOIN `user_type` ON `user`.`user_type_id`=`user_type`.`id` INNER JOIN `user_status` ON `user`.`user_status_id`=`user_status`.`id`");
         loadTypes();
         loadStatus();
         this.home = home;
     }
 
-    private void loadUsers() {
+    private void loadUsers(String query) {
         try {
             DefaultTableModel defaultTableModel = (DefaultTableModel) jTable1.getModel();
             defaultTableModel.setRowCount(0);
 
-            ResultSet resultSet = MySQL.execute("SELECT * FROM `user` INNER JOIN `user_type` ON `user`.`user_type_id`=`user_type`.`id` INNER JOIN `user_status` ON `user`.`user_status_id`=`user_status`.`id`");
+            ResultSet resultSet = MySQL.execute(query);
 
             while (resultSet.next()) {
                 Vector vector = new Vector();
@@ -56,6 +58,8 @@ public class UserManagement extends javax.swing.JPanel {
         }
     }
 
+    private HashMap<String, String> typeMap = new HashMap<>();
+
     private void loadTypes() {
         try {
             ResultSet resultSet = MySQL.execute("SELECT * FROM `user_type`");
@@ -65,6 +69,7 @@ public class UserManagement extends javax.swing.JPanel {
 
             while (resultSet.next()) {
                 vector.add(resultSet.getString("type"));
+                typeMap.put(resultSet.getString("type"), resultSet.getString("id"));
             }
 
             DefaultComboBoxModel model = (DefaultComboBoxModel) jComboBox1.getModel();
@@ -79,6 +84,8 @@ public class UserManagement extends javax.swing.JPanel {
 
     }
 
+    private HashMap<String, String> statusMap = new HashMap<>();
+
     private void loadStatus() {
         try {
             ResultSet resultSet = MySQL.execute("SELECT * FROM `user_status`");
@@ -88,6 +95,7 @@ public class UserManagement extends javax.swing.JPanel {
 
             while (resultSet.next()) {
                 vector.add(resultSet.getString("status"));
+                statusMap.put(resultSet.getString("status"), resultSet.getString("id"));
             }
 
             DefaultComboBoxModel model = (DefaultComboBoxModel) jComboBox2.getModel();
@@ -99,6 +107,16 @@ public class UserManagement extends javax.swing.JPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void reset() {
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField4.setText("");
+        jPasswordField1.setText("");
+        jComboBox1.setSelectedIndex(0);
+        jComboBox2.setSelectedIndex(0);
     }
 
     /**
@@ -120,13 +138,13 @@ public class UserManagement extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jComboBox2 = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
+        jPasswordField1 = new javax.swing.JPasswordField();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -137,6 +155,12 @@ public class UserManagement extends javax.swing.JPanel {
         jLabel2.setText("Last Name");
 
         jLabel3.setText("Mobile");
+
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField3KeyReleased(evt);
+            }
+        });
 
         jLabel4.setText("Username");
 
@@ -149,10 +173,17 @@ public class UserManagement extends javax.swing.JPanel {
         jButton1.setText("Create Account");
 
         jButton2.setText("Update Account");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel7.setText("Status");
+
+        jPasswordField1.setPreferredSize(new java.awt.Dimension(64, 22));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -161,13 +192,13 @@ public class UserManagement extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(9, 9, 9)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
                     .addComponent(jTextField2)
                     .addComponent(jTextField3)
                     .addComponent(jTextField4)
-                    .addComponent(jTextField5)
                     .addComponent(jTextField1)
                     .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -204,7 +235,7 @@ public class UserManagement extends javax.swing.JPanel {
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -213,11 +244,11 @@ public class UserManagement extends javax.swing.JPanel {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -326,6 +357,48 @@ public class UserManagement extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTable1MouseClicked
 
+    private void jTextField3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyReleased
+        // TODO add your handling code here:
+
+        String text = jTextField3.getText();
+
+        loadUsers("SELECT * FROM `user` INNER JOIN `user_type` ON `user`.`user_type_id`=`user_type`.`id` INNER JOIN `user_status` ON `user`.`user_status_id`=`user_status`.`id` WHERE `mobile` LIKE '" + text + "%'");
+        reset();
+        jTextField3.setText(text);
+
+    }//GEN-LAST:event_jTextField3KeyReleased
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+
+        int selectedRow = jTable1.getSelectedRow();
+
+        if (selectedRow != -1) {
+
+            String id = jTable1.getValueAt(selectedRow, 0).toString();
+            String firstName = jTextField1.getText();
+            String lastName = jTextField2.getText();
+            String mobile = jTextField3.getText();
+            String userName = jTextField4.getText();
+            String password = String.valueOf(jPasswordField1.getPassword());
+            String type = jComboBox1.getSelectedItem().toString();
+            String status = jComboBox2.getSelectedItem().toString();
+
+            try {
+                MySQL.execute("UPDATE `user` SET `fname`='" + firstName + "',`lname`='" + lastName + "',`mobile`='" + mobile + "',`username`='" + userName + "',`password`='" + password + "',`user_type_id`='" + typeMap.get(type) + "',`user_status_id`='" + statusMap.get(status) + "' WHERE `id`='" + id + "'");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            reset();
+            loadUsers("SELECT * FROM `user` INNER JOIN `user_type` ON `user`.`user_type_id`=`user_type`.`id` INNER JOIN `user_status` ON `user`.`user_status_id`=`user_status`.`id`");
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Please Select a user", "Message", JOptionPane.WARNING_MESSAGE);
+        }
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -342,12 +415,12 @@ public class UserManagement extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     // End of variables declaration//GEN-END:variables
 }
