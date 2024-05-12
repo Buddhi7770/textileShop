@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `brand` (
   PRIMARY KEY (`b_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table texttile_db.brand: ~3 rows (approximately)
+-- Dumping data for table texttile_db.brand: ~0 rows (approximately)
 REPLACE INTO `brand` (`b_id`, `b_name`) VALUES
 	(1, 'Adidas'),
 	(2, 'Boss'),
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   CONSTRAINT `fk_category_sub_category1` FOREIGN KEY (`sc_id`) REFERENCES `sub_category` (`sc_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table texttile_db.category: ~5 rows (approximately)
+-- Dumping data for table texttile_db.category: ~0 rows (approximately)
 REPLACE INTO `category` (`c_id`, `mc_id`, `sc_id`) VALUES
 	(1, 1, 1),
 	(2, 2, 1),
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `color` (
   PRIMARY KEY (`co_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table texttile_db.color: ~4 rows (approximately)
+-- Dumping data for table texttile_db.color: ~0 rows (approximately)
 REPLACE INTO `color` (`co_id`, `co_name`) VALUES
 	(1, 'White'),
 	(2, 'Black'),
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
   PRIMARY KEY (`mobile`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table texttile_db.customer: ~4 rows (approximately)
+-- Dumping data for table texttile_db.customer: ~0 rows (approximately)
 REPLACE INTO `customer` (`mobile`, `fname`, `lname`, `points`) VALUES
 	('0', 'None', 'None', 0),
 	('0775555555', 'Isuru', 'Madushanka', 0),
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `main_category` (
   PRIMARY KEY (`mc_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table texttile_db.main_category: ~3 rows (approximately)
+-- Dumping data for table texttile_db.main_category: ~0 rows (approximately)
 REPLACE INTO `main_category` (`mc_id`, `mc_name`) VALUES
 	(1, 'Gents'),
 	(2, 'Ladies'),
@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `payment_method` (
   PRIMARY KEY (`pm_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table texttile_db.payment_method: ~2 rows (approximately)
+-- Dumping data for table texttile_db.payment_method: ~0 rows (approximately)
 REPLACE INTO `payment_method` (`pm_id`, `name`) VALUES
 	(1, 'Cash'),
 	(2, 'Card');
@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   CONSTRAINT `fk_product_brand1` FOREIGN KEY (`b_id`) REFERENCES `brand` (`b_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table texttile_db.product: ~3 rows (approximately)
+-- Dumping data for table texttile_db.product: ~2 rows (approximately)
 REPLACE INTO `product` (`p_id`, `title`, `c_id`, `b_id`) VALUES
 	(1, 'Gents Short Sleeve Printed White T-Shirt', 1, 1),
 	(2, 'Ladies Long Sleeve Plain Black T-Shirt', 2, 2),
@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `size` (
   PRIMARY KEY (`s_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table texttile_db.size: ~4 rows (approximately)
+-- Dumping data for table texttile_db.size: ~0 rows (approximately)
 REPLACE INTO `size` (`s_id`, `s_name`) VALUES
 	(1, 'S'),
 	(2, 'M'),
@@ -191,7 +191,7 @@ CREATE TABLE IF NOT EXISTS `stock` (
   CONSTRAINT `fk_stock_size1` FOREIGN KEY (`s_id`) REFERENCES `size` (`s_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table texttile_db.stock: ~8 rows (approximately)
+-- Dumping data for table texttile_db.stock: ~0 rows (approximately)
 REPLACE INTO `stock` (`barcode`, `p_id`, `s_id`, `co_id`, `price`, `available_qty`) VALUES
 	(12345, 1, 1, 1, 2000, 3),
 	(12346, 1, 1, 2, 2000, 5),
@@ -209,7 +209,7 @@ CREATE TABLE IF NOT EXISTS `sub_category` (
   PRIMARY KEY (`sc_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table texttile_db.sub_category: ~3 rows (approximately)
+-- Dumping data for table texttile_db.sub_category: ~0 rows (approximately)
 REPLACE INTO `sub_category` (`sc_id`, `sc_name`) VALUES
 	(1, 'T-Shirt'),
 	(2, 'Short'),
@@ -232,7 +232,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   CONSTRAINT `fk_user_user_type` FOREIGN KEY (`user_type_id`) REFERENCES `user_type` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table texttile_db.user: ~2 rows (approximately)
+-- Dumping data for table texttile_db.user: ~0 rows (approximately)
 REPLACE INTO `user` (`id`, `fname`, `lname`, `mobile`, `username`, `password`, `user_type_id`, `user_status_id`) VALUES
 	(1, 'Sahan', 'Perera', '0771112223', 'sahan', '123', 1, 1),
 	(2, 'Kasun', 'Bandara', '0774445556', 'kasun', '456', 2, 1);
