@@ -14,12 +14,12 @@ import javax.swing.JOptionPane;
  *
  * @author TUF_Heat_
  */
-public class Signin extends javax.swing.JFrame {
+public class Signin1 extends javax.swing.JFrame {
 
     /**
      * Creates new form SignIn
      */
-    public Signin() {
+    public Signin1() {
         initComponents();
     }
 
@@ -184,7 +184,7 @@ public class Signin extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Signin().setVisible(true);
+                new Signin1().setVisible(true);
             }
         });
     }
