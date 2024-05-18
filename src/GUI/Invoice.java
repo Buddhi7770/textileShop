@@ -5,8 +5,14 @@
  */
 package GUI;
 
+import Model.CustomerBean;
+import Model.MySQL;
 import Model.UserBean;
 import com.formdev.flatlaf.FlatDarkLaf;
+import java.awt.event.KeyEvent;
+import java.sql.ResultSet;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -15,18 +21,20 @@ import com.formdev.flatlaf.FlatDarkLaf;
 public class Invoice extends javax.swing.JFrame {
 
     private UserBean userBean;
-    
-    public void setUser(UserBean userBean){
+    private CustomerBean customerBean = new CustomerBean();
+
+    public void setUser(UserBean userBean) {
         this.userBean = userBean;
         jLabel38.setText(userBean.getUsername());
-        jLabel36.setText("Hello "+userBean.getUserfname()+" "+userBean.getUserlname());
+        jLabel36.setText("Hello " + userBean.getUserfname() + " " + userBean.getUserlname());
     }
+
     /**
      * Creates new form Invoice
      */
     public Invoice() {
         initComponents();
-        
+
     }
 
     /**
@@ -98,6 +106,12 @@ public class Invoice extends javax.swing.JFrame {
 
         jLabel1.setText("Customer Mobile");
 
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
+            }
+        });
+
         jLabel2.setText("First Name");
 
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
@@ -143,23 +157,35 @@ public class Invoice extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel3)
                         .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel4)
                         .addComponent(jLabel5)
-                        .addComponent(jButton2)))
+                        .addComponent(jButton2))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
 
         jLabel6.setText("Barcode");
+
+        jTextField4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextField4MouseClicked(evt);
+            }
+        });
+        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
 
         jLabel7.setText("Product ID");
 
@@ -224,8 +250,8 @@ public class Invoice extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel19)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
+                        .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -281,17 +307,14 @@ public class Invoice extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "Barcode", "Product Id", "Title", "Main Category", "Sub Category", "Brand", "Color", "Price", "Quantity"
+                "Barcode", "Product Id", "Title", "Main Category", "Sub Category", "Brand", "Color", "Size", "Price", "Quantity"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -310,6 +333,7 @@ public class Invoice extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(6).setResizable(false);
             jTable1.getColumnModel().getColumn(7).setResizable(false);
             jTable1.getColumnModel().getColumn(8).setResizable(false);
+            jTable1.getColumnModel().getColumn(9).setResizable(false);
         }
 
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
@@ -497,6 +521,132 @@ public class Invoice extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String mobile = jTextField1.getText();
+            try {
+                ResultSet resultSet = MySQL.execute("SELECT * FROM `customer` WHERE `mobile`='" + mobile + "'");
+
+                if (resultSet.next()) {
+                    String fname = resultSet.getString("fname");
+                    String lname = resultSet.getString("lname");
+                    int points = resultSet.getInt("points");
+
+                    customerBean.setFname(fname);
+                    customerBean.setLname(lname);
+                    customerBean.setMobile(mobile);
+                    customerBean.setPoint(points);
+                    jTextField2.setText(fname);
+                    jTextField3.setText(lname);
+                    jLabel5.setText(String.valueOf(points));
+                } else {
+                    customerBean.setFname("None");
+                    customerBean.setLname("None");
+                    customerBean.setMobile("None");
+                    customerBean.setPoint(0);
+                    jTextField1.setText("");
+                    jTextField2.setText("");
+                    jTextField3.setText("");
+                    jLabel5.setText("0");
+                }
+            } catch (Exception e) {
+            }
+        }
+    }//GEN-LAST:event_jTextField1KeyReleased
+
+    private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String barcode = jTextField4.getText();
+            try {
+                ResultSet resultSet = MySQL.execute("SELECT * FROM `stock` INNER JOIN `size` ON `stock`.`s_id`=`size`.`s_id` INNER JOIN `color` ON `stock`.`co_id`=`color`.`co_id` INNER JOIN `product` ON `stock`.`p_id`=`product`.`p_id` INNER JOIN `brand` ON `product`.`b_id`=`brand`.`b_id` INNER JOIN `category` ON `product`.`c_id`=`category`.`c_id` INNER JOIN `main_category` ON `category`.`mc_id`=`main_category`.`mc_id` INNER JOIN `sub_category` ON `category`.`sc_id`=`sub_category`.`sc_id` WHERE `barcode`='" + barcode + "'");
+                if (resultSet.next()) {jTextField4.setEnabled(false);
+                    String pid = resultSet.getString("p_id");
+                    String title = resultSet.getString("title");
+                    String mainCategory = resultSet.getString("mc_name");
+                    String subCategory = resultSet.getString("sc_name");
+                    String brand = resultSet.getString("b_name");
+                    String color = resultSet.getString("co_name");
+                    String size = resultSet.getString("s_name");
+                    String price = resultSet.getString("price");
+                    String available_qty = resultSet.getString("available_qty");
+
+                    jLabel8.setText(pid);
+                    jLabel16.setText(title);
+                    jLabel10.setText(mainCategory);
+                    jLabel12.setText(subCategory);
+                    jLabel20.setText(brand);
+                    jLabel14.setText(color);
+                    jLabel24.setText(size);
+                    jLabel18.setText(price);
+                    jLabel22.setText(available_qty);
+                    
+                    int row  = jTable1.getRowCount();
+                    
+                    boolean found = false;
+                    
+                    for (int i = 0; i < row; i++) {
+                        String barcode2 = String.valueOf(jTable1.getValueAt(i, 0));
+                        
+                        if(barcode.equals(barcode2)){                        String qty2 = String.valueOf(jTable1.getValueAt(i, 9));
+                            jTable1.setValueAt(Integer.parseInt(qty2) +1, i, 9);
+                            found = true;
+                            break;
+                        }
+                    }
+                    
+                    if(!found){
+                        Vector vector = new Vector();
+                    vector.add(barcode);
+                    vector.add(pid);
+                    vector.add(title);
+                    vector.add(mainCategory);
+                    vector.add(subCategory);
+                    vector.add(brand);
+                    vector.add(color);
+                    vector.add(size);
+                    vector.add(price);
+                    vector.add(1);
+                    
+                    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                    model.addRow(vector);
+                    }
+                    
+
+                } else {
+                    jLabel8.setText("");
+                    jLabel16.setText("");
+                    jLabel10.setText("");
+                    jLabel12.setText("");
+                    jLabel20.setText("");
+                    jLabel14.setText("");
+                    jLabel24.setText("");
+                    jLabel18.setText("");
+                    jLabel22.setText("");
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_jTextField4KeyReleased
+
+    private void jTextField4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField4MouseClicked
+        // TODO add your handling code here:
+        if(evt.getClickCount()==2){
+            jTextField4.setEnabled(true);
+            jLabel8.setText("");
+                    jLabel16.setText("");
+                    jLabel10.setText("");
+                    jLabel12.setText("");
+                    jLabel20.setText("");
+                    jLabel14.setText("");
+                    jLabel24.setText("");
+                    jLabel18.setText("");
+                    jLabel22.setText("");
+        }
+    }//GEN-LAST:event_jTextField4MouseClicked
 
     /**
      * @param args the command line arguments
