@@ -12,6 +12,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -34,7 +35,29 @@ public class Invoice extends javax.swing.JFrame {
      */
     public Invoice() {
         initComponents();
+        loadPaymentMethod();
+    }
 
+    private void loadPaymentMethod() {
+
+        try {
+            ResultSet resultSet = MySQL.execute("SELECT * FROM `payment_method`");
+            DefaultComboBoxModel model = (DefaultComboBoxModel) jComboBox1.getModel();
+            model.removeAllElements();
+
+            Vector v = new Vector();
+            v.add("Select");
+
+            while (resultSet.next()) {
+                v.add(resultSet.getString("pm_name"));
+            }
+            
+            model.addAll(v);
+            jComboBox1.setSelectedIndex(0);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
