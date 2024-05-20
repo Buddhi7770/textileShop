@@ -561,7 +561,8 @@ public class Invoice extends javax.swing.JFrame {
             String barcode = jTextField4.getText();
             try {
                 ResultSet resultSet = MySQL.execute("SELECT * FROM `stock` INNER JOIN `size` ON `stock`.`s_id`=`size`.`s_id` INNER JOIN `color` ON `stock`.`co_id`=`color`.`co_id` INNER JOIN `product` ON `stock`.`p_id`=`product`.`p_id` INNER JOIN `brand` ON `product`.`b_id`=`brand`.`b_id` INNER JOIN `category` ON `product`.`c_id`=`category`.`c_id` INNER JOIN `main_category` ON `category`.`mc_id`=`main_category`.`mc_id` INNER JOIN `sub_category` ON `category`.`sc_id`=`sub_category`.`sc_id` WHERE `barcode`='" + barcode + "'");
-                if (resultSet.next()) {jTextField4.setEnabled(false);
+                if (resultSet.next()) {
+                    jTextField4.setEnabled(false);
                     String pid = resultSet.getString("p_id");
                     String title = resultSet.getString("title");
                     String mainCategory = resultSet.getString("mc_name");
@@ -581,38 +582,38 @@ public class Invoice extends javax.swing.JFrame {
                     jLabel24.setText(size);
                     jLabel18.setText(price);
                     jLabel22.setText(available_qty);
-                    
-                    int row  = jTable1.getRowCount();
-                    
+
+                    int row = jTable1.getRowCount();
+
                     boolean found = false;
-                    
+
                     for (int i = 0; i < row; i++) {
                         String barcode2 = String.valueOf(jTable1.getValueAt(i, 0));
-                        
-                        if(barcode.equals(barcode2)){                        String qty2 = String.valueOf(jTable1.getValueAt(i, 9));
-                            jTable1.setValueAt(Integer.parseInt(qty2) +1, i, 9);
+
+                        if (barcode.equals(barcode2)) {
+                            String qty2 = String.valueOf(jTable1.getValueAt(i, 9));
+                            jTable1.setValueAt(Integer.parseInt(qty2) + 1, i, 9);
                             found = true;
                             break;
                         }
                     }
-                    
-                    if(!found){
+
+                    if (!found) {
                         Vector vector = new Vector();
-                    vector.add(barcode);
-                    vector.add(pid);
-                    vector.add(title);
-                    vector.add(mainCategory);
-                    vector.add(subCategory);
-                    vector.add(brand);
-                    vector.add(color);
-                    vector.add(size);
-                    vector.add(price);
-                    vector.add(1);
-                    
-                    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-                    model.addRow(vector);
+                        vector.add(barcode);
+                        vector.add(pid);
+                        vector.add(title);
+                        vector.add(mainCategory);
+                        vector.add(subCategory);
+                        vector.add(brand);
+                        vector.add(color);
+                        vector.add(size);
+                        vector.add(price);
+                        vector.add(1);
+
+                        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                        model.addRow(vector);
                     }
-                    
 
                 } else {
                     jLabel8.setText("");
@@ -634,17 +635,17 @@ public class Invoice extends javax.swing.JFrame {
 
     private void jTextField4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField4MouseClicked
         // TODO add your handling code here:
-        if(evt.getClickCount()==2){
+        if (evt.getClickCount() == 2) {
             jTextField4.setEnabled(true);
             jLabel8.setText("");
-                    jLabel16.setText("");
-                    jLabel10.setText("");
-                    jLabel12.setText("");
-                    jLabel20.setText("");
-                    jLabel14.setText("");
-                    jLabel24.setText("");
-                    jLabel18.setText("");
-                    jLabel22.setText("");
+            jLabel16.setText("");
+            jLabel10.setText("");
+            jLabel12.setText("");
+            jLabel20.setText("");
+            jLabel14.setText("");
+            jLabel24.setText("");
+            jLabel18.setText("");
+            jLabel22.setText("");
         }
     }//GEN-LAST:event_jTextField4MouseClicked
 
