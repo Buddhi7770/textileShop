@@ -23,6 +23,10 @@ public class Invoice extends javax.swing.JFrame {
 
     private UserBean userBean;
     private CustomerBean customerBean = new CustomerBean();
+    private int totalQuantity;
+    private double total;
+    private double paidAmount;
+    private double balance;
 
     public void setUser(UserBean userBean) {
         this.userBean = userBean;
@@ -38,6 +42,51 @@ public class Invoice extends javax.swing.JFrame {
         loadPaymentMethod();
     }
 
+    private void calculate() {
+        totalQuantity = 0;
+        total = 0;
+
+        int rowCount = jTable1.getRowCount();
+
+        for (int i = 0; i < rowCount; i++) {
+
+            String tableQty = String.valueOf(jTable1.getValueAt(i, 9));
+            String tablePrice = String.valueOf(jTable1.getValueAt(i, 8));
+
+            totalQuantity += Integer.parseInt(tableQty);
+            total += Double.parseDouble(tablePrice) * Integer.parseInt(tableQty);
+        }
+        jLabel26.setText(String.valueOf(totalQuantity));
+        jLabel28.setText(String.valueOf(total));
+        calculatePayment();
+    }
+
+    public void calculatePayment() {
+        String paymentMethod = String.valueOf(jComboBox1.getSelectedItem());
+        jFormattedTextField1.setEnabled(true);
+        if (jCheckBox1.isSelected()) {
+            jLabel28.setText(String.valueOf(total - customerBean.getPoint()));
+        } else {
+            jLabel28.setText(String.valueOf(total));
+        }
+
+        if (paymentMethod.equals("Select")) {
+            paidAmount = 0;
+            balance = 0;
+            jFormattedTextField1.setText(String.valueOf(paidAmount));
+        } else if (paymentMethod.equals("Cash")) {
+            paidAmount = Double.parseDouble(jFormattedTextField1.getText());
+            balance = paidAmount - Double.parseDouble(jLabel28.getText());
+        } else {
+            paidAmount = total;
+            balance = 0;
+            jFormattedTextField1.setText(jLabel28.getText());
+            jFormattedTextField1.setEnabled(false);
+        }
+
+        jLabel32.setText(String.valueOf(balance));
+    }
+
     private void loadPaymentMethod() {
 
         try {
@@ -51,10 +100,10 @@ public class Invoice extends javax.swing.JFrame {
             while (resultSet.next()) {
                 v.add(resultSet.getString("pm_name"));
             }
-            
+
             model.addAll(v);
             jComboBox1.setSelectedIndex(0);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -110,11 +159,11 @@ public class Invoice extends javax.swing.JFrame {
         jLabel29 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel30 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
         jLabel32 = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
+        jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabel33 = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
@@ -344,6 +393,11 @@ public class Invoice extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setResizable(false);
@@ -374,6 +428,12 @@ public class Invoice extends javax.swing.JFrame {
 
         jLabel29.setText("Payment Method");
 
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
+
         jLabel30.setText("Paid Amount");
 
         jLabel31.setText("Balance");
@@ -382,11 +442,28 @@ public class Invoice extends javax.swing.JFrame {
         jLabel32.setText("0");
 
         jCheckBox1.setText("Redeem Points");
+        jCheckBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCheckBox1ItemStateChanged(evt);
+            }
+        });
+        jCheckBox1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jCheckBox1PropertyChange(evt);
+            }
+        });
 
         jButton1.setText("Print Invoice");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
+        jFormattedTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jFormattedTextField1KeyReleased(evt);
             }
         });
 
@@ -409,16 +486,19 @@ public class Invoice extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel28, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
                             .addComponent(jLabel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel31)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jCheckBox1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel31))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(11, 11, 11)
+                                .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -441,7 +521,7 @@ public class Invoice extends javax.swing.JFrame {
                 .addGap(3, 3, 3)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel30)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel31)
@@ -637,7 +717,7 @@ public class Invoice extends javax.swing.JFrame {
                         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
                         model.addRow(vector);
                     }
-
+                    calculate();
                 } else {
                     jLabel8.setText("");
                     jLabel16.setText("");
@@ -672,6 +752,38 @@ public class Invoice extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextField4MouseClicked
 
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+
+        if (evt.getClickCount() == 2) {
+            int selectedRow = jTable1.getSelectedRow();
+            if (selectedRow != -1) {
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                model.removeRow(selectedRow);
+            }
+            calculate();
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+        // TODO add your handling code here:
+        calculatePayment();
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
+
+    private void jCheckBox1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jCheckBox1PropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBox1PropertyChange
+
+    private void jFormattedTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jFormattedTextField1KeyReleased
+        // TODO add your handling code here:
+        calculatePayment();
+    }//GEN-LAST:event_jFormattedTextField1KeyReleased
+
+    private void jCheckBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox1ItemStateChanged
+        // TODO add your handling code here:
+        calculatePayment();
+    }//GEN-LAST:event_jCheckBox1ItemStateChanged
+
     /**
      * @param args the command line arguments
      */
@@ -691,6 +803,7 @@ public class Invoice extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -739,6 +852,5 @@ public class Invoice extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     // End of variables declaration//GEN-END:variables
 }
